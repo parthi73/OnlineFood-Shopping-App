@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background-image: url(img/conbg.jpg);
+            background-repeat: no-repeat;
+            background-size: cover;
+
+        }
+
+        .content {
+            width: 500px;
+            background-color: transparent;
+            backdrop-filter: blur(10px);
+            border-radius: 5px;
+            margin: 10px;
+            padding: 10px;
+        }
+
+        .form-label {
+            color: white;
+        }
+
+        label {
+            margin-right: 5px;
+        }
+
+        .form-control {
+            background-color: transparent;
+            border: 1px solid gray;
+            color: white;
+        }
+
+        button {
+
+            width: 230px;
+            height: 50px;
+            margin-top: 10px;
+
+
+        }
+
+        span {
+            font-size: 23px;
+        }
+
+        /* media query for tablet */
+
+        @media screen and (max-width: 768px) {
+            .contres {
+                width: 680px;
+            }
+
+            .form-label {
+                font-size: 20px;
+            }
+
+            .name {
+                height: 35px;
+            }
+
+            .lastname {
+                height: 35px;
+            }
+
+            .email {
+                height: 35px;
+            }
+
+            span {
+                font-size: 30px;
+            }
+
+            button {
+                width: 250px;
+                height: 70px;
+
+            }
+
+            .content {
+                width: 300px;
+                margin-left: 0;
+                margin-right: 0;
+            }
+
+            .btnres {
+                width: 680px;
+            }
+
+            body {
+
+                background-size: auto 700px;
+            }
+        }
+
+        /* media query for large mobile  */
+        @media screen and (max-width: 425px) {
+            .contres {
+                width: 390px;
+            }
+
+            span {
+                font-size: 18px;
+            }
+
+            button {
+                width: 150px;
+                height: 50px;
+
+            }
+
+            .content {
+                width: 250px;
+                margin-left: 0;
+                margin-right: 0;
+            }
+
+            .btnres {
+                width: 390px;
+            }
+
+            body {
+
+                background-size: auto 680px;
+
+
+            }
+        }
+
+        /* media query for mobile large screen */
+
+        @media screen and (max-width: 375px) {
+            .contres {
+                width: 335px;
+            }
+
+            span {
+                font-size: 18px;
+            }
+
+            button {
+                width: 150px;
+                height: 50px;
+
+            }
+
+            .content {
+                width: 250px;
+                margin-left: 0;
+                margin-right: 0;
+            }
+
+            .btnres {
+                width: 338px;
+            }
+
+            body {
+
+                background-size: auto 650px;
+
+
+            }
+        }
+
+        /* media query for mobile small screen */
+
+        @media screen and (max-width: 320px) {
+
+            .contres {
+                width: 300px;
+
+            }
+
+            span {
+                font-size: 18px;
+            }
+
+            button {
+                width: 120px;
+                height: 40px;
+
+            }
+
+            .content {
+                width: 150px;
+                padding: 0;
+
+            }
+
+            .btnres {
+                width: 300px;
+            }
+
+            body {
+
+                background-size: auto 650px;
+
+
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- form start -->
+    <div class="container my-5">
+        <form class="content">
+            <div class="contres">
+
+                <div class="mb-1 ">
+                    <label class="form-label">First Name:</label>
+                    <input type="text" class="form-control  name">
+                </div>
+                <div class="mb-1 ">
+                    <label class="form-label">Last Name:</label>
+                    <input type="text" class="form-control   lastname">
+                </div>
+                <div class="mb-1 ">
+                    <label class="form-label">Email address:</label>
+                    <input type="email" class="form-control  email">
+                </div>
+                <label class="form-label">Messages:</label>
+                <div class="form-floating mb-3  ">
+                    <textarea class="form-control br-10 textarea"></textarea>
+
+                </div>
+            </div>
+            <div class="d-flex justify-content-between btnres">
+                <button type="submit" class="btn btn-primary submitbtn btn1" id="submitbtn"><span>Submit</span></button>
+                <button type="submit" class="btn btn-light btn2" onclick="clearField()"><span>Clear</span></button>
+            </div>
+        </form>
+
+    </div>
+
+
+    <!-- form end -->
+
+    <script>
+        function clearField() {
+            document.querySelector('.name').value = '';
+            document.querySelector('.lastname').value = '';
+            document.querySelector('.email').value = '';
+            document.querySelector('.textarea').value = '';
+
+        }
+
+
+        const orderbtn = document.querySelector('#submitbtn');
+
+        orderbtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            alert('Submitted !!');
+            window.location.assign("index.html");
+
+        });
+    </script>
+</body>
+
+</html>
