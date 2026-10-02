@@ -1,183 +1,133 @@
-const btnCart=document.querySelector('#cart-icon');
-const cart=document.querySelector('.cart');
-const btnClose=document.querySelector('#cart-close');
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
 
-document.addEventListener('DOMContentLoaded', () => {
-    // Initially hide the cart
-    cart.classList.remove('cart-active');
+/* ---- Edit your menu here ---- */
+const MENU=[
+ {t:'Dosha',p:40,c:'Tiffin',i:'img/dosha.jpg',e:'🥞'},
+ {t:'Egg Omelette',p:50,c:'Non-Veg',i:'img/egg-Omelette.jpg',e:'🍳'},
+ {t:'Chicken Fry',p:100,c:'Non-Veg',i:'img/chickan-fry.jpg',e:'🍗'},
+ {t:'Mutton Biriyani',p:150,c:'Biriyani',i:'img/motton-briyani.jpg',e:'🍛'},
+ {t:'Parotta',p:40,c:'Tiffin',i:'img/parotta.jpg',e:'🫓'},
+ {t:'Fish Fry',p:50,c:'Non-Veg',i:'img/fish-fry.jpg',e:'🐟'},
+ {t:'Chicken Biriyani',p:200,c:'Biriyani',i:'img/chickan-briyani.jpg',e:'🍛'},
+ {t:'Chicken Parotta',p:100,c:'Non-Veg',i:'img/chickan-parotta.jpg',e:'🌯'}
+];
+const DELIVERY=30;
+/* ---- Put YOUR real UPI ID here ---- */
+const UPI_ID='yourname@upi', UPI_NAME='Online Food';
 
-    // Event listener to show the cart on button click
-    btnCart.addEventListener('click', () => {
-        cart.classList.add('cart-active');
-    });
+let cart=JSON.parse(localStorage.getItem('cart')||'[]');
+const save=()=>localStorage.setItem('cart',JSON.stringify(cart));
+const sub=()=>cart.reduce((a,x)=>a+x.p*x.q,0);
+const thumb=x=>`<div class="thumb">${x.e}<img src="${x.i}" alt="" onerror="this.remove()"></div>`;
 
-    // Event listener to hide the cart on close button click
-    btnClose.addEventListener('click', () => {
-        cart.classList.remove('cart-active');
-    });
+function toast(m){const t=$('#toast');if(!t)return;t.textContent=m;t.classList.add('on');setTimeout(()=>t.classList.remove('on'),2200)}
 
-    
-    LoadFood();
-});
+/* ---- Cart ---- */
+function renderCart(){
+  const n=cart.reduce((a,x)=>a+x.q,0), b=$('#badge');
+  if(b){b.textContent=n;b.style.display=n?'grid':'none'}
+  const box=$('#items'); if(!box)return;
+  box.innerHTML=cart.length?cart.map(x=>`<div class="item">${thumb(x)}
+    <div><h4>${x.t}</h4><small>Rs.${x.p}</small>
+    <div class="qty"><button data-a="-" data-t="${x.t}">−</button><b>${x.q}</b><button data-a="+" data-t="${x.t}">+</button></div></div>
+    <button class="del" data-a="x" data-t="${x.t}" aria-label="Remove">🗑️</button></div>`).join(''):'<p class="muted">Your cart is empty 🍽️</p>';
+  $('#total').textContent='Rs.'+sub();
+}
+function openCart(o){$('#cart').classList.toggle('open',o);$('#overlay').classList.toggle('on',o)}
 
+/* ---- Menu page ---- */
+if($('#grid')){
+  let cat='All', q='';
+  const cats=['All',...new Set(MENU.map(m=>m.c))];
+  $('#chips').innerHTML=cats.map(c=>`<button class="chip${c==='All'?' on':''}">${c}</button>`).join('');
+  const draw=()=>{
+    const list=MENU.filter(m=>(cat==='All'||m.c===cat)&&m.t.toLowerCase().includes(q));
+    $('#grid').innerHTML=list.length?list.map(m=>`<article class="card"><div class="pic">${m.e}<img src="${m.i}" alt="${m.t}" loading="lazy" onerror="this.remove()"></div>
+      <div class="info"><small>${m.c}</small><h3>${m.t}</h3><div class="row"><b>Rs.${m.p}</b><button class="add" data-t="${m.t}" aria-label="Add ${m.t}">+</button></div></div></article>`).join(''):'<p class="empty">No dishes found 😕</p>';
+  };
+  $('#chips').onclick=e=>{if(!e.target.matches('.chip'))return;cat=e.target.textContent;$$('.chip').forEach(c=>c.classList.toggle('on',c===e.target));draw()};
+  $('#q').oninput=e=>{q=e.target.value.toLowerCase().trim();draw()};
+  $('#grid').onclick=e=>{
+    const b=e.target.closest('.add'); if(!b)return;
+    const m=MENU.find(x=>x.t===b.dataset.t), f=cart.find(x=>x.t===m.t);
+    f?f.q++:cart.push({t:m.t,p:m.p,i:m.i,e:m.e,q:1});
+    save();renderCart();toast(m.t+' added to cart');
+  };
+  $('#items').onclick=e=>{
+    const b=e.target.closest('button'); if(!b)return;
+    const x=cart.find(i=>i.t===b.dataset.t); if(!x)return;
+    if(b.dataset.a==='+')x.q++;
+    if(b.dataset.a==='-')x.q--;
+    if(b.dataset.a==='x'||x.q<1)cart=cart.filter(i=>i!==x);
+    save();renderCart();
 
-document.addEventListener('DOMContentLoaded',LoadFood);
-
-function LoadFood(){
-
-    LoadContent();
-
+/* footer Home button: scroll to top */
+if($('#homeBtn'))$('#homeBtn').onclick=e=>{e.preventDefault();window.scrollTo({top:0,behavior:'smooth'})};
+  };
+  $('#cartBtn').onclick=()=>openCart(true);
+  $('#cartClose').onclick=$('#overlay').onclick=()=>openCart(false);
+  $('#checkout').onclick=()=>cart.length?location.href='payment.html':toast('Your cart is empty');
+  draw();
 }
 
-function LoadContent(){
-//remove food items from cart
-let btnRemove=document.querySelectorAll('.cart-remove');
+/* ---- Payment page ---- */
+if($('#payForm')){
+  const s=sub(), d=cart.length?DELIVERY:0, total=s+d;
+  $('#sumItems').innerHTML=cart.length?cart.map(x=>`<div class="item" style="grid-template-columns:62px 1fr auto">${thumb(x)}<div><h4>${x.t}</h4><small>Qty ${x.q}</small></div><b>Rs.${x.p*x.q}</b></div>`).join(''):'<p class="muted">Cart is empty. <a href="index.html" style="color:var(--brand)">Add food</a></p>';
+  $('#sub').textContent='Rs.'+s;$('#del').textContent='Rs.'+d;$('#grand').textContent='Rs.'+total;
+  $('#qrAmt').textContent='Rs.'+total;$('#qrTo').textContent=UPI_ID;
 
-btnRemove.forEach((btn)=>{
-    btn.addEventListener('click',removeItem);
-});
+  const upiLink=(pa,am)=>`upi://pay?pa=${encodeURIComponent(pa)}&pn=${encodeURIComponent(UPI_NAME)}&am=${am}&cu=INR&tn=${encodeURIComponent('Food order')}`;
+  let tab='id';
 
-// product item qty change event
+  const sync=()=>{
+    const m=$('input[name=pay]:checked').value;
+    $('#cardFields').hidden=m!=='card';
+    $$('#cardFields input').forEach(i=>i.disabled=m!=='card');
+    $('#upiPanel').hidden=m!=='upi';
+    $('#upiId').disabled=!(m==='upi'&&tab==='id');
+    $('#paidChk').disabled=!(m==='upi'&&tab==='qr');
+    $('#Orderbtn').textContent=m==='upi'&&tab==='qr'?"I've paid, place order":m==='cod'?'Place order (Pay on delivery)':'Order Now!';
+  };
+  $$('input[name=pay]').forEach(r=>r.onchange=sync);
+  $$('.tab').forEach(t=>t.onclick=()=>{
+    tab=t.dataset.tab;
+    $$('.tab').forEach(x=>x.classList.toggle('on',x===t));
+    $('#tabId').hidden=tab!=='id';$('#tabQr').hidden=tab!=='qr';sync();
+  });
 
-let qtyElements=document.querySelectorAll('.cart-quantity');
+  const okRe=/^[A-Za-z0-9._\-]{2,}@[A-Za-z]{2,}$/;
+  $('#upiId').oninput=e=>$('.upi-input').classList.toggle('valid',okRe.test(e.target.value));
+  $$('.suffixes button').forEach(b=>b.onclick=()=>{
+    const i=$('#upiId'); i.value=i.value.split('@')[0]+b.dataset.s; i.dispatchEvent(new Event('input')); i.focus();
+  });
+  $$('.app').forEach(a=>a.onclick=e=>{
+    e.preventDefault();
+    if(!total)return toast('Your cart is empty');
+    location.href=upiLink(UPI_ID,total.toFixed(2));
+    setTimeout(()=>toast('If nothing opened, use the UPI ID or QR option'),1500);
+  });
+  sync();
 
-qtyElements.forEach((input)=>{
-    input.addEventListener('change',changeQty);
-});
+  $('#cc').oninput=e=>e.target.value=e.target.value.replace(/\D/g,'').slice(0,16).replace(/(.{4})/g,'$1 ').trim();
+  $('#ex').oninput=e=>{let v=e.target.value.replace(/\D/g,'').slice(0,4);e.target.value=v.length>2?v.slice(0,2)+'/'+v.slice(2):v};
 
-//Product cart click
-let cartbtn=document.querySelectorAll('.add-cart');
-cartbtn.forEach((btn)=>{
-    btn.addEventListener('click',addcart);
-});
-
-updateTotal();
+  $('#payForm').onsubmit=e=>{
+    e.preventDefault();
+    if(!cart.length)return toast('Your cart is empty');
+    $('#oid').textContent='#'+Math.floor(100000+Math.random()*900000);
+    $('#modal').classList.add('on');
+    cart=[];save();
+    setTimeout(()=>location.href='index.html',3000);
+  };
 }
 
-
-//remove Items
-function removeItem(){
-    if(confirm("Are You Sure Remove This Item?")){
-        // permanant remove some cart item into array
-        let title=this.parentElement.querySelector('.cart-food-title').innerHTML; 
-        itemList=itemList.filter(el=>el.title!=title);                 
-    this.parentElement.remove();
-    LoadContent();
-    }
-}
-//chage quantity
-function changeQty(){
-    if(isNaN(this.value) || this.value<1){
-        this.value=1
-    }
-    LoadContent()
+/* ---- Contact page ---- */
+if($('#contactForm')){
+  $('#contactForm').onsubmit=e=>{e.preventDefault();e.target.reset();toast('Message sent. Thank you!');setTimeout(()=>location.href='index.html',1500)};
 }
 
-let itemList=[];
+renderCart();
 
-//add cart
-function addcart(){
-    //storing cart product values
-   let food=this.parentElement;
-   let title=food.querySelector(".food-title").innerHTML;
-
-   let price=food.querySelector(".food-price").innerHTML;
-
-   let imgsrc=food.querySelector(".food-img").src;
-     //storing cart product values end
-
-   let newProduct={title,price,imgsrc}
-
-
-   // js code change div
-   let newProductElement=createCartProduct(title,price,imgsrc)
-
-   
-   //check prduct alredy exist in cart
-   if(itemList.find((el)=>el.title==newProduct.title))
-   {
-    alert('Product Already Added In Your Cart!');
-    return;
-   }
-   else{
-    itemList.push(newProduct);
-   }
-
-   //cart item code to change element
-
-   let element=document.createElement('div');
-   element.innerHTML=newProductElement;
-
-   let cartBasket=document.querySelector(".cart-content");
-
-   cartBasket.append(element);
-
-   LoadContent(); 
-
-}
-   function createCartProduct(title,price,imgsrc){
-    return `
-    <div class="cart-box">
-            <img src="${imgsrc}" class="cart-img">
-            <div class="detail-box">
-              <div class="cart-food-title">${title}</div>
-              <div class="price-box">
-                <div class="cart-price">${price}</div>
-                <div class="cart-amt">${price}</div>
-              </div>
-              <input type="number" value="1" class="cart-quantity">
-            </div>
-            <ion-icon name="trash-outline" class="cart-remove"></ion-icon>
-          </div>
-        </div> 
-      `;
-   }
-
-   function updateTotal()
-   {
-        const cartItem=document.querySelectorAll('.cart-box');
-        const totalValue=document.querySelector('.total-price');
-
-        let total=0;
-
-        cartItem.forEach((product)=>{
-
-            let priceElement=product.querySelector('.cart-price');
-            let price=parseFloat(priceElement.innerHTML.replace("Rs.","")); //parsefloat is change string into floatnumber , replace is remove tha 'Rs' string value
-            let qty=product.querySelector('.cart-quantity').value;
-            total+=(price*qty); // qty*price value store in Total.
-
-            product.querySelector('.cart-amt').innerText="Rs."+(price*qty); // element right side total value
-        })
- 
-        totalValue.innerHTML='Rs.'+total;  // over all total value
-
-        // add product count cart Icon
-
-        const cartCount=document.querySelector('.cart-cound');
-        let count=itemList.length;
-        cartCount.innerHTML=count;
-
-        // cart icon showing and hidden event
-        if(count==0)
-        {
-            cartCount.style.display='none'; 
-        }
-        else
-        {
-            cartCount.style.display='block'; 
-        }
-   }
-// shiping form order now button
-const orderbtn=document.querySelector('#Orderbtn');
-
-orderbtn.addEventListener('click',(e)=>{
-  e.preventDefault();
-  alert('Order Placed !!');
-  window.location.assign("index.html");
- 
-});
-
-
-
-          
+/* footer Home button: scroll to top */
+if($('#homeBtn'))$('#homeBtn').onclick=e=>{e.preventDefault();window.scrollTo({top:0,behavior:'smooth'})};
