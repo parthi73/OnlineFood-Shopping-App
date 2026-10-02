@@ -865,3 +865,140 @@ footer {
         grid-template-columns: repeat(2, 1fr)
     }
 }
+
+/* payment redesign */
+.steps {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 26px;
+    flex-wrap: wrap
+}
+
+.st {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: .85rem;
+    font-weight: 600;
+    color: var(--muted)
+}
+
+.st i {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-style: normal;
+    font-size: .8rem;
+    background: var(--card);
+    border: 1px solid var(--line)
+}
+
+.st.on {
+    color: var(--text)
+}
+
+.st.on i,
+.st.done i {
+    background: linear-gradient(135deg, var(--brand), var(--brand2));
+    color: #fff;
+    border-color: transparent
+}
+
+.bar {
+    flex: 0 0 40px;
+    height: 2px;
+    background: var(--line)
+}
+
+h3.sec {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 6px
+}
+
+h3.sec em {
+    font-style: normal;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-size: .8rem;
+    color: #fff;
+    background: linear-gradient(135deg, var(--brand), var(--brand2))
+}
+
+.pay label {
+    display: grid;
+    gap: 2px;
+    padding: 16px 10px;
+    border-radius: 18px
+}
+
+.pay .pi {
+    font-size: 1.7rem
+}
+
+.pay small {
+    color: var(--muted);
+    font-weight: 400;
+    font-size: .72rem
+}
+
+.pay label:has(input:checked) {
+    box-shadow: 0 8px 22px rgba(255, 90, 60, .18)
+}
+
+.summary {
+    position: sticky;
+    top: 90px
+}
+
+.qrbox img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    border-radius: 10px
+}
+
+/* footer */
+.site-footer {
+    background: var(--card);
+    border-top: 1px solid var(--line);
+    padding: 30px 0;
+    text-align: center
+}
+
+.foot {
+    display: grid;
+    gap: 16px;
+    justify-items: center
+}
+
+.foot-links {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    flex-wrap: wrap;
+    justify-content: center;
+    font-weight: 500
+}
+
+.foot-links a:not(.btn):hover {
+    color: var(--brand)
+}
+
+.home-btn {
+    padding: 9px 22px;
+    font-size: .9rem
+}
+
+.site-footer p {
+    color: var(--muted);
+    font-size: .82rem
+}

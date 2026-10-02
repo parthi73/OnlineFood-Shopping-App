@@ -1,56 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Priyam Hotel</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Priyam Hotel</title>
+  <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-<header><div class="wrap">
-  <a href="index.html" class="logo">🍽️ Priyam <span class="grad">Hotel</span></a>
-  <nav><a href="#menu">Menu</a><a href="contact.html">Contact</a>
-    <button class="cart-btn" id="cartBtn" aria-label="Open cart">🛒<span class="badge" id="badge">0</span></button>
-  </nav>
-</div></header>
-
-<main class="wrap">
-  <section class="hero">
-    <div>
-      <h1>Discover the <span class="grad">best food</span> near you</h1>
-      <p>Fresh, hot and delivered fast. Pick your favourites and place your order in a few taps.</p>
-      <div class="search"><input id="q" placeholder="Search dosha, biriyani, parotta..."><a href="#menu" class="btn" style="padding:10px 22px">Search</a></div>
+  <header>
+    <div class="wrap">
+      <a href="index.html" class="logo">🍽️ Priyam <span class="grad">Hotel</span></a>
+      <nav><a href="#menu">Menu</a><a href="contact.html">Contact</a>
+        <button class="cart-btn" id="cartBtn" aria-label="Open cart">🛒<span class="badge" id="badge">0</span></button>
+      </nav>
     </div>
-    <div class="big">🍛</div>
-  </section>
+  </header>
 
-  <section id="menu">
-    <h2>Our <span class="grad">Menu</span></h2>
-    <div class="chips" id="chips"></div>
-    <div class="grid" id="grid"></div>
-  </section>
-</main>
+  <main class="wrap">
+    <section class="hero">
+      <div>
+        <h1>Discover the <span class="grad">best food</span> near you</h1>
+        <p>Fresh, hot and delivered fast. Pick your favourites and place your order in a few taps.</p>
+        <div class="search"><input id="q" placeholder="Search dosha, biriyani, parotta..."><a href="#menu" class="btn"
+            style="padding:10px 22px">Search</a></div>
+      </div>
+      <div class="big">🍛</div>
+    </section>
 
-<footer class="site-footer">
-  <div class="wrap foot">
-    <a href="index.html" class="logo">🍽️ Priyam <span class="grad">Hotel</span></a>
-    <div class="foot-links">
-      <a href="#" class="btn home-btn" id="homeBtn">🏠 Home</a>
-      <a href="#menu">Menu</a>
-      <a href="contact.html">Contact</a>
+    <section id="menu">
+      <h2>Our <span class="grad">Menu</span></h2>
+      <div class="chips" id="chips"></div>
+      <div class="grid" id="grid"></div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap foot">
+      <a href="index.html" class="logo">🍽️ Priyam <span class="grad">Hotel</span></a>
+      <div class="foot-links">
+        <a href="#" class="btn home-btn" id="homeBtn">🏠 Home</a>
+        <a href="#menu">Menu</a>
+        <a href="contact.html">Contact</a>
+      </div>
+      <p>© 2027 All Rights Reserved · Made by Parthipan</p>
     </div>
-    <p>© 2027 All Rights Reserved . Made By Parthipan</p>
-  </div>
-</footer>
+  </footer>
 
-<div class="overlay" id="overlay"></div>
-<aside class="cart" id="cart">
-  <div class="cart-head"><h2>Your Cart</h2><button class="x" id="cartClose" aria-label="Close">✕</button></div>
-  <div class="items" id="items"></div>
-  <div class="sum"><span>Total</span><span id="total">Rs.0</span></div>
-  <button class="btn block" id="checkout">Place Order</button>
-</aside>
-<div class="toast" id="toast"></div>
-<script src="script.js"></script>
+  <div class="overlay" id="overlay"></div>
+  <aside class="cart" id="cart">
+    <div class="cart-head">
+      <h2>Your Cart</h2><button class="x" id="cartClose" aria-label="Close">✕</button>
+    </div>
+    <div class="items" id="items"></div>
+    <div class="sum"><span>Total</span><span id="total">Rs.0</span></div>
+    <button class="btn block" id="checkout">Place Order</button>
+  </aside>
+  <div class="toast" id="toast"></div>
+  <script src="script.js"></script>
 </body>
+
 </html>

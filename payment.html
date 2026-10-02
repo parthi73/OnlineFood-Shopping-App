@@ -13,10 +13,15 @@
 </div></header>
 
 <main class="wrap page">
-  <h2 style="margin-bottom:20px;margin-left: 20px;">Check<span class="grad">out</span></h2>
+  <div class="steps">
+    <div class="st done"><i>✔</i>Cart</div><span class="bar"></span>
+    <div class="st on"><i>2</i>Details &amp; Payment</div><span class="bar"></span>
+    <div class="st"><i>3</i>Done</div>
+  </div>
+
   <div class="two-col">
     <form class="form-card" id="payForm">
-      <h3 class="sec">Delivery details</h3>
+      <h3 class="sec"><em>1</em>Delivery details</h3>
       <div class="fields">
         <div><label for="fn">First name</label><input id="fn" required></div>
         <div><label for="ln">Last name</label><input id="ln" required></div>
@@ -28,18 +33,22 @@
         <div><label for="zip">Pincode</label><input id="zip" required pattern="[0-9]{6}" maxlength="6" inputmode="numeric"></div>
       </div>
 
-      <h3 class="sec">Payment</h3>
+      <h3 class="sec"><em>2</em>Payment method</h3>
       <div class="pay">
-        <label><input type="radio" name="pay" value="card" checked>💳 Card</label>
-        <label><input type="radio" name="pay" value="upi">📱 UPI</label>
-        <label><input type="radio" name="pay" value="cod">💵 Cash</label>
+        <label><input type="radio" name="pay" value="card" checked><span class="pi">💳</span><b>Card</b><small>Credit / Debit</small></label>
+        <label><input type="radio" name="pay" value="upi"><span class="pi">📱</span><b>UPI</b><small>ID or QR code</small></label>
+        <label><input type="radio" name="pay" value="cod"><span class="pi">💵</span><b>Cash</b><small>Pay on delivery</small></label>
       </div>
+
+      <!-- ===== CARD ===== -->
       <div class="fields" id="cardFields">
         <div class="full"><label for="cn">Name on card</label><input id="cn" required></div>
         <div class="full"><label for="cc">Card number</label><input id="cc" required inputmode="numeric" maxlength="19" placeholder="0000 0000 0000 0000"></div>
         <div><label for="ex">Expiry</label><input id="ex" required placeholder="MM/YY" maxlength="5"></div>
         <div><label for="cv">CVV</label><input id="cv" required type="password" maxlength="4" inputmode="numeric"></div>
       </div>
+
+      <!-- ===== UPI ===== -->
       <div id="upiPanel" class="upi" hidden>
         <div class="tabs">
           <button type="button" class="tab on" data-tab="id">🔗 Enter UPI ID</button>
@@ -49,42 +58,45 @@
         <div id="tabId">
           <p class="hint">Pay with your favourite app</p>
           <div class="apps">
-            <a class="app" data-app="gpay" href="#"><i style="background:#4285f4">G</i>GPay</a>
-            <a class="app" data-app="phonepe" href="#"><i style="background:#5f259f">Pe</i>PhonePe</a>
-            <a class="app" data-app="paytm" href="#"><i style="background:#00b9f1">Pt</i>Paytm</a>
-            <a class="app" data-app="bhim" href="#"><i style="background:#f58220">B</i>BHIM</a>
+            <a class="app" href="#"><i style="background:#4285f4">G</i>GPay</a>
+            <a class="app" href="#"><i style="background:#5f259f">Pe</i>PhonePe</a>
+            <a class="app" href="#"><i style="background:#00b9f1">Pt</i>Paytm</a>
+            <a class="app" href="#"><i style="background:#f58220">B</i>BHIM</a>
           </div>
           <div class="or"><span>or pay using UPI ID</span></div>
           <label for="upiId">Your UPI ID</label>
           <div class="upi-input">
             <input id="upiId" placeholder="yourname@okaxis" pattern="[A-Za-z0-9._\-]{2,}@[A-Za-z]{2,}" autocomplete="off" required>
-            <span class="ok" id="upiOk">✔</span>
+            <span class="ok">✔</span>
           </div>
           <div class="suffixes">
             <button type="button" data-s="@okaxis">@okaxis</button><button type="button" data-s="@ybl">@ybl</button>
             <button type="button" data-s="@paytm">@paytm</button><button type="button" data-s="@oksbi">@oksbi</button>
             <button type="button" data-s="@upi">@upi</button>
           </div>
-          <p class="note" style="margin-top:10px">You will get a payment request in your UPI app. Approve it to complete the order.</p>
         </div>
 
         <div id="tabQr" hidden>
-          <div class="qrbox"><div id="qr"></div></div>
+          
+              <!-- ========================= QR image ========================= -->
+          <div class="qrbox"><img src="img/qr.png" alt="Scan to pay"></div>
+          <!-- ========================= END QR ========================= -->
+
           <p class="qrline">Pay <b id="qrAmt"></b> to <b id="qrTo"></b></p>
-          <p class="timer" id="timerBox">QR expires in <b id="timer">05:00</b></p>
           <p class="note" style="text-align:center">Open any UPI app, tap <b>Scan</b> and scan this code.</p>
           <label class="chk"><input type="checkbox" id="paidChk" required> I have completed the payment</label>
         </div>
       </div>
-      <button class="btn block" type="submit" id="Orderbtn">Order Now!</button>
-      <p class="note">Demo form: no real payment is processed.</p>
+    </form>
 
     <aside class="summary">
-      <h3 class="sec" style="margin:0 0 10px">Order summary</h3>
+      <h3 class="sec" style="margin-top:0">Order summary</h3>
       <div id="sumItems"></div>
       <div class="line"><span>Subtotal</span><span id="sub">Rs.0</span></div>
       <div class="line"><span>Delivery</span><span id="del">Rs.0</span></div>
       <div class="line t"><span>Total</span><span id="grand">Rs.0</span></div>
+      <button class="btn block" type="submit" form="payForm" id="Orderbtn">Order Now!</button>
+      <p class="note" style="text-align:center">🔒 Secure checkout · Demo: no real payment is processed</p>
     </aside>
   </div>
 </main>
@@ -95,7 +107,6 @@
   <a href="index.html" class="btn">Back to menu</a>
 </div></div>
 <div class="toast" id="toast"></div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script src="script.js"></script>
 </body>
 </html>
